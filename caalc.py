@@ -74,12 +74,15 @@ class Calc(tpg.Parser):
     """
 
 calc = Calc()
-Vars={}
-PS1='--> '
+Vars = {}
+PS1 = '--> '
 
-Stop=False
-while not Stop:
-    line = raw_input(PS1)
+while True:
+    try:
+        line = raw_input(PS1)
+    except EOFError:
+        print "Good bye!"
+        break
     try:
         res = calc(line)
     except tpg.Error as exc:
