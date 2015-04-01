@@ -77,16 +77,33 @@ calc = Calc()
 Vars = {}
 PS1 = '--> '
 
-while True:
+script = None
+if len(sys.argv) > 1:
     try:
-        line = raw_input(PS1)
-    except EOFError:
-        print "Good bye!"
-        break
+        script = open(sys.argv[1])
+    except Exception as e:
+        print >> sys.stderr, e
+        exit()
+
+res = None
+while True:
+    if script:
+        line = script.readline()
+        if not line:
+            break
+    else:
+        try:
+            line = raw_input(PS1)
+        except EOFError:
+            print "Good bye!"
+            break
     try:
         res = calc(line)
     except tpg.Error as exc:
         print >> sys.stderr, exc
-        res = None
-    if res != None:
+        exit()
+    if res != None and not script:
         print res
+
+if script:
+    print res
