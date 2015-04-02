@@ -5,6 +5,7 @@ import readline
 import sys
 import tpg
 import itertools
+import numpy as np
 
 def make_op(s):
     return {
@@ -46,6 +47,9 @@ class Vector(list):
         except TypeError:
             return self.__class__(c or a for c in self)
 
+class Matrix(np.matrix):
+    pass
+
 class Calc(tpg.Parser):
     r"""
 
@@ -62,14 +66,15 @@ class Calc(tpg.Parser):
     Operator -> Assign ;
     Assign -> id/i '=' Expr/e $Vars[i]=e$ ;
     Expr/t -> Fact/t ( op1/op Fact/f $t=op(t,f)$ )* ;
-    Fact/f -> Atom/f ( op2/op Atom/a $f=op(f,a)$ )* ;
-    Atom/a ->   Vector/a
-              | id/i ( check $i in Vars$ | error $"Undefined variable '{}'".format(i)$ ) $a=Vars[i]$
+    Fact/f -> Compound/f ( op2/op Compound/a $f=op(f,a)$ )* ;
+    Compound/a -> Matrix/a | Vector/a | '\(' Expr/a '\)' ;
+    Atom/a ->   id/i ( check $i in Vars$ | error $"Undefined variable '{}'".format(i)$ ) $a=Vars[i]$
               | fnumber/a
               | number/a
-              | '\(' Expr/a '\)' ;
+              ;
     Vector/$Vector(a)$ -> '\[' '\]' $a=[]$ | '\[' Atoms/a '\]' ;
     Atoms/v -> Atom/a Atoms/t $v=[a]+t$ | Atom/a $v=[a]$ ;
+    Matrix/m -> \[ Vector/m $m=Matrix(m)$  (, Vector/v $ m=np.vstack((m, v)) $)* ,? \] ;
 
     """
 
