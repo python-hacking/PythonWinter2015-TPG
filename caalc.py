@@ -13,7 +13,7 @@ EOF_MESSAGE = "Good bye!"
 def transpose(x):
     if type(x) in (type(1.), type(1)):
         return x
-    return np.transpose(x)
+    return np.transpose(x) # FXME: x.transpose()
 
 def minus(x, y=None):
     if y == None:

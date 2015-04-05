@@ -23,7 +23,8 @@ class RuntimeErrorException(Exception):
 def do_test(filename):
     caalc_out = subprocess.check_output(['python', caalc_path, filename], stderr=null_file)
     expected_out = open(filename + expected_suffix).read()
-    if caalc_out.split() != expected_out.split():
+    normalize = lambda out : "".join(out.split())
+    if normalize(caalc_out) != normalize(expected_out):
         raise WrongAnswerException("caalc error: WA")
 
 failed = []
