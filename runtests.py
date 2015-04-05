@@ -7,22 +7,24 @@ import sys
 import subprocess
 
 file_suffix = ".txt"
+expected_suffix = ".expected"
 null_file = open("/dev/null", "w")
 
 caalc_path = sys.argv[1] if len(sys.argv) > 1 else os.environ["PWD"] + "/caalc.py"
 src_root = os.environ["PWD"] + "/tests"
 
-# TODO: no check for Wrong Answer yet
 class WrongAnswerException(Exception):
     pass
 
+# FIXME: unused
 class RuntimeErrorException(Exception):
     pass
 
 def do_test(filename):
-    ret_code = subprocess.check_call(['python', caalc_path, filename], stderr=null_file)
-    if ret_code:
-        raise RuntimeErrorException("caalc error: RE") 
+    caalc_out = subprocess.check_output(['python', caalc_path, filename], stderr=null_file)
+    expected_out = open(filename + expected_suffix).read()
+    if caalc_out.split() != expected_out.split():
+        raise WrongAnswerException("caalc error: WA")
 
 failed = []
 for root, dirs, files in os.walk(src_root):
