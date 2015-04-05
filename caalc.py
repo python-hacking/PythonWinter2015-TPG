@@ -10,6 +10,11 @@ import numpy as np
 ERROR_CODE = 11
 EOF_MESSAGE = "Good bye!"
 
+def transpose(x):
+    if type(x) in (type(1.), type(1)):
+        return x
+    return np.transpose(x)
+
 def minus(x, y=None):
     if y == None:
         return -x
@@ -24,6 +29,7 @@ def plus(x, y=None):
 
 def make_op(s):
     return {
+        'T': transpose,
         '+': plus,
         '-': minus,
         '*': lambda x,y: x*y,
@@ -73,7 +79,7 @@ class Calc(tpg.Parser):
 
     token fnumber: '\d+[.]\d*' float ;
     token number: '\d+' int ;
-    token op1: '[|&+-]' make_op ;
+    token op1: '[|&+-T]' make_op ;
     token op2: '[*/]' make_op ;
     token id: '\w+' ;
 
