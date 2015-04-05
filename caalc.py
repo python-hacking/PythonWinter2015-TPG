@@ -10,10 +10,22 @@ import numpy as np
 ERROR_CODE = 11
 EOF_MESSAGE = "Good bye!"
 
+def minus(x, y=None):
+    if y == None:
+        return -x
+    else:
+        return x - y
+
+def plus(x, y=None):
+    if y == None:
+        return +x
+    else:
+        return x + y
+
 def make_op(s):
     return {
-        '+': lambda x,y: x+y,
-        '-': lambda x,y: x-y,
+        '+': plus,
+        '-': minus,
         '*': lambda x,y: x*y,
         '/': lambda x,y: x/y,
         '&': lambda x,y: x&y,
@@ -68,8 +80,9 @@ class Calc(tpg.Parser):
     START/e -> Operator $e=None$ | Expr/e | $e=None$ ;
     Operator -> Assign ;
     Assign -> id/i '=' Expr/e $Vars[i]=e$ ;
-    Expr/t -> Fact/t ( op1/op Fact/f $t=op(t,f)$ )* ;
-    Fact/f -> Compound/f ( op2/op Compound/a $f=op(f,a)$ )* ;
+    Expr/t -> Summand/t ( op1/op Summand/f $t=op(t,f)$ )* ;
+    Summand/f -> Factor/f ( op2/op Factor/a $f=op(f,a)$ )* ;
+    Factor/f -> Compound/f | op1/op Factor/f $f=op(f)$ ;
     Compound/a -> Matrix/a | Vector/a | '\(' Expr/a '\)' | Atom/a ;
     Atom/a ->   id/i ( check $i in Vars$ | error $"Undefined variable '{}'".format(i)$ ) $a=Vars[i]$
               | fnumber/a
