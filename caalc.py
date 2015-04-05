@@ -74,8 +74,7 @@ class Calc(tpg.Parser):
               ;
     Vector/$Vector(a)$ -> '\[' '\]' $a=[]$ | '\[' Atoms/a '\]' ;
     Atoms/v -> Atom/a Atoms/t $v=[a]+t$ | Atom/a $v=[a]$ ;
-    Matrix/m -> \[ Vector/m $m=Matrix(m)$  (, Vector/v $ m=np.vstack((m, v)) $)* ,? \] ;
-
+    Matrix/m ->'\[' Vector/m $m=Matrix(m)$  ( Vector/v $ m=np.vstack((m, v)) $)+ '\]' ;
     """
 
 calc = Calc()
