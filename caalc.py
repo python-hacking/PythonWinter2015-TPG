@@ -7,6 +7,8 @@ import tpg
 import itertools
 import numpy as np
 
+ERROR_CODE = 11
+
 def make_op(s):
     return {
         '+': lambda x,y: x+y,
@@ -89,8 +91,8 @@ if len(sys.argv) > 1:
         print >> sys.stderr, e
         exit()
 
-res = None
 while True:
+    res = None
     if script:
         line = script.readline()
         if not line:
@@ -105,7 +107,8 @@ while True:
         res = calc(line)
     except tpg.Error as exc:
         print >> sys.stderr, exc
-        exit()
+        if script:
+            exit(ERROR_CODE)
     if res != None and not script:
         print res
 
