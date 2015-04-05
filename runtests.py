@@ -20,7 +20,7 @@ class RuntimeErrorException(Exception):
     pass
 
 def do_test(filename):
-    ret_code = subprocess.check_call([caalc_path, filename], stderr=null_file)
+    ret_code = subprocess.check_call(['python', caalc_path, filename], stderr=null_file)
     if ret_code:
         raise RuntimeErrorException("caalc error: RE") 
 

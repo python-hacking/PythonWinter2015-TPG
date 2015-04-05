@@ -8,6 +8,7 @@ import itertools
 import numpy as np
 
 ERROR_CODE = 11
+EOF_MESSAGE = "Good bye!"
 
 def make_op(s):
     return {
@@ -76,7 +77,7 @@ class Calc(tpg.Parser):
               ;
     Vector/$Vector(a)$ -> '\[' '\]' $a=[]$ | '\[' Atoms/a '\]' ;
     Atoms/v -> Atom/a Atoms/t $v=[a]+t$ | Atom/a $v=[a]$ ;
-    Matrix/m ->'\[' Vector/m $m=Matrix(m)$  ( Vector/v $ m=np.vstack((m, v)) $)+ '\]' ;
+    Matrix/m ->'\[' Vector/m $m=Matrix(m)$  ( Vector/v $ m=np.vstack((m, v)) $)* '\]' ;
     """
 
 calc = Calc()
@@ -100,7 +101,7 @@ while True:
         try:
             line = raw_input(PS1)
         except EOFError:
-            print "Good bye!"
+            print EOF_MESSAGE
             break
     res = None
     try:
