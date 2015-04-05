@@ -92,7 +92,6 @@ if len(sys.argv) > 1:
         exit()
 
 while True:
-    res = None
     if script:
         line = script.readline()
         if not line:
@@ -103,6 +102,7 @@ while True:
         except EOFError:
             print "Good bye!"
             break
+    res = None
     try:
         res = calc(line)
     except tpg.Error as exc:

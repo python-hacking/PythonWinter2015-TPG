@@ -25,8 +25,6 @@ def do_test(filename):
         raise RuntimeErrorException("caalc error: RE") 
 
 failed = []
-print caalc_path
-print caalc_path
 for root, dirs, files in os.walk(src_root):
     lst = [root + '/' + i for i in files if i.endswith(file_suffix)]
     for src_file in lst:
