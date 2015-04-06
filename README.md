@@ -6,3 +6,11 @@ Matrices are input like this:
 
 Supported prefix unary operations are '+', '-' and 'T'. 
 T stands for 'transpose'. And since it is a keyword, 'T' cannot be a variable name.
+
+Semantics for some operations:
+
+| is concatenation where applicable and bitwise OR in other places.
+
+for example \[\[1 2\] \[1 2\]\] | \[\[3 4\] \[3 4\]\]  --> \[\[1 2 3 4\]\[1 2 3 4\]\].
+
+& is inner product (generalized dot product) or bitwise AND.

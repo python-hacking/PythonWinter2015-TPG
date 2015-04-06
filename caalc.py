@@ -10,10 +10,12 @@ import numpy as np
 ERROR_CODE = 11
 EOF_MESSAGE = "Good bye!"
 
+number_types = (type(1.), type(1))
+
 def transpose(x):
-    if type(x) in (type(1.), type(1)):
+    if type(x) in number_types:
         return x
-    return np.transpose(x) # FXME: x.transpose()
+    return x.transpose()
 
 def minus(x, y=None):
     if y == None:
@@ -38,37 +40,45 @@ def make_op(s):
         '|': lambda x,y: x|y,
     }[s]
 
-class Vector(list):
-    def __init__(self, *argp, **argn):
-        list.__init__(self, *argp, **argn)
-
+class BadOperandsError(Exception):
     def __str__(self):
-        return "[" + " ".join(str(c) for c in self) + "]"
-
-    def __op(self, a, op):
-        try:
-            return self.__class__(op(s,e) for s,e in zip(self, a))
-        except TypeError:
-            return self.__class__(op(c,a) for c in self)
-
-    def __add__(self, a): return self.__op(a, lambda c,d: c+d)
-    def __sub__(self, a): return self.__op(a, lambda c,d: c-d)
-    def __div__(self, a): return self.__op(a, lambda c,d: c/d)
-    def __mul__(self, a): return self.__op(a, lambda c,d: c*d)
-
-    def __and__(self, a):
-        try:
-            return reduce(lambda s, (c,d): s+c*d, zip(self, a), 0)
-        except TypeError:
-            return self.__class__(c and a for c in self)
-
-    def __or__(self, a):
-        try:
-            return self.__class__(itertools.chain(self, a))
-        except TypeError:
-            return self.__class__(c or a for c in self)
+        return "Bad operands!"
 
 class Matrix(np.matrix):
+    def __str__(self):
+        if self.shape[0] == 1:
+            return self.getA1().__str__()
+        elif self.shape[1] == 1:
+            return "T " + self.getA1().__str__()
+        else:
+            return self.getA().__str__()
+
+    def transpose(self):
+        return np.transpose(self)
+
+    def __and__(self, rhs):
+        try:
+            if self.shape == rhs.shape:
+                return np.inner(self, rhs).getA1()[0]
+            else:
+                raise BadOperandsError()
+        except AttributeError:
+            return super(np.matrix, self).__and__(int(rhs))
+
+    def __or__(self, rhs):
+        try:
+            return np.hstack((self, rhs))
+        except ValueError: # incompatible dimensions
+            pass
+        try:
+            return super(np.matrix, self).__or__(int(rhs))
+        except TypeError:
+            raise BadOperandsError()
+
+# In case we'll want vector product or something..
+# Anyway, keeping this class looks like a good idea
+# because this way the grammar is cleaner
+class Vector(Matrix):
     pass
 
 class Calc(tpg.Parser):
