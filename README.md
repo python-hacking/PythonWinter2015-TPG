@@ -2,6 +2,7 @@
 Command reading, parsing and interpreting
 
 Usage:
+
 For interactive prompt simply run caalc.py.
 For batch execution supply your command file as an argument. The output is the result of the last operation executed. (Beware that assignment operator has no value, so if you want to see contents of a variable, just say it's name in the last command).
 Execution of this script
@@ -13,6 +14,7 @@ var
 will yield 12.
 
 Matrices are input like this:
+
 ```
 [[1 2 3] [1 2 3] [3 2 1] [4 5 6]]
 ```
@@ -24,11 +26,12 @@ v = T [3 4 5] # v is a  3 x 1 vector.
 ```
 
 Semantics for some operations:
+
 | is concatenation where applicable and bitwise OR in other places. For example
 ```
 [[1 2] [1 2]] | [[3 4] [3 4]]
 ```
-rulults in ``` [[1 2 3 4][1 2 3 4]]```.
+results in ``` [[1 2 3 4][1 2 3 4]]```.
 & is inner product (generalized dot product) or bitwise AND.
 
 
