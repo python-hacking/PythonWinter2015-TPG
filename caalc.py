@@ -53,9 +53,6 @@ class Matrix(np.matrix):
         else:
             return self.getA().__str__()
 
-    def transpose(self):
-        return np.transpose(self)
-
     def __and__(self, rhs):
         try:
             if self.shape == rhs.shape:
